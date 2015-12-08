@@ -7,23 +7,21 @@ PHP_ARG_ENABLE(xdebug, whether to enable Xdebug support,
 if test "$PHP_XDEBUG" != "no"; then
 dnl disabling O2 for GCC 4.8
   AS_IF([test "x$GCC" = "xyes"],[
-    AS_IF([test "x$CC" = "xcc" || test "x$CC" = "xgcc"],[
-      AS_IF([test `${CC} --version | head -1 | cut -d ' ' -f 1` = "gcc"],[
-        AC_CACHE_CHECK([$CC version],[ax_cv_xdebug_gcc_version],[
-          ax_cv_xdebug_gcc_version="`$CC -dumpversion`"
-          AS_IF([test "x$ax_cv_xdebug_gcc_version" = "x"],[
-            ax_cv_xdebug_gcc_version=""
-          ])
+    AS_IF([test `${CC} --version | ${AWK} '/(GCC)/ { print "gcc" }'` = "gcc"],[
+      AC_CACHE_CHECK([$CC version],[ax_cv_xdebug_gcc_version],[
+        ax_cv_xdebug_gcc_version="`$CC -dumpversion`"
+        AS_IF([test "x$ax_cv_xdebug_gcc_version" = "x"],[
+          ax_cv_xdebug_gcc_version=""
         ])
-        XDEBUG_GCC_VERSION=$ax_cv_xdebug_gcc_version
-        XDEBUG_GCC_VERSION_MAJOR=$(echo $XDEBUG_GCC_VERSION | cut -d'.' -f1)
-        XDEBUG_GCC_VERSION_MINOR=$(echo $XDEBUG_GCC_VERSION | cut -d'.' -f2)
+      ])
+      XDEBUG_GCC_VERSION=$ax_cv_xdebug_gcc_version
+      XDEBUG_GCC_VERSION_MAJOR=$(echo $XDEBUG_GCC_VERSION | cut -d'.' -f1)
+      XDEBUG_GCC_VERSION_MINOR=$(echo $XDEBUG_GCC_VERSION | cut -d'.' -f2)
 
-        AS_IF([test "x$XDEBUG_GCC_VERSION_MAJOR" = "x4"],[
-          AS_IF([test "x$XDEBUG_GCC_VERSION_MINOR" = "x8"],[
-            AC_MSG_RESULT([disabling optimisation because of GCC 4.8])
-            CFLAGS=`echo $CFLAGS | sed 's/O2/O0/'`
-          ])
+      AS_IF([test "x$XDEBUG_GCC_VERSION_MAJOR" = "x4"],[
+        AS_IF([test "x$XDEBUG_GCC_VERSION_MINOR" = "x8"],[
+          AC_MSG_RESULT([disabling optimisation because of GCC 4.8])
+          CFLAGS=`echo $CFLAGS | sed 's/O2/O0/'`
         ])
       ])
     ])
