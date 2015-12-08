@@ -7,7 +7,7 @@ PHP_ARG_ENABLE(xdebug, whether to enable Xdebug support,
 if test "$PHP_XDEBUG" != "no"; then
 dnl disabling O2 for GCC 4.8
   AS_IF([test "x$GCC" = "xyes"],[
-    AS_IF([test `${CC} --version | ${AWK} '/(GCC)/ { print "gcc" }'` = "gcc"],[
+    AS_IF([test x`${CC} --version | ${AWK} '/(GCC)/ { print "gcc" }'` = "xgcc"],[
       AC_CACHE_CHECK([$CC version],[ax_cv_xdebug_gcc_version],[
         ax_cv_xdebug_gcc_version="`$CC -dumpversion`"
         AS_IF([test "x$ax_cv_xdebug_gcc_version" = "x"],[
